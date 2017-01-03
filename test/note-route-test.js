@@ -59,7 +59,7 @@ describe('Note Routes', function() {
         .then( list => {
           this.tempList = list;
           console.log('this- ', this);
-          exampleNote.listID = list.id;
+          exampleNote.listID = list._id;
         })
         .then( exampleNote => {
           new Note(exampleNote).save()
