@@ -24,16 +24,16 @@ describe('List Routes', function() {
     describe('with a valid body', function() {
       after( done => {
         if (this.tempList) {
-          List.remove({})
+          List.findByIdAndRemove(this.tempList._id)
           .then( () => done())
           .catch(done);
           return;
-        };
+        }
         done();
       });
 
-      it('should return a list', done => {
-        request.post(`${url}/api/list`)
+      it('should post a list', done => {
+        request.post(`${url}`)
         .send(exampleList)
         .end((err, res) => {
           if (err) return done(err);
@@ -63,16 +63,16 @@ describe('List Routes', function() {
 
       after( done => {
         if (this.tempList) {
-          List.remove({})
+          List.findByIdAndRemove(this.tempList._id)
           .then( () => done())
           .catch(done);
           return;
-        };
+        }
         done();
       });
 
       it('should return a list', done => {
-        request.get(`${url}/api/list/${this.tempList._id}`)
+        request.get(`${url}/${this.tempList._id}`)
         .end((err, res) => {
           if (err) return done(err);
           expect(res.status).to.equal(200);
@@ -98,18 +98,18 @@ describe('List Routes', function() {
 
       after( done => {
         if (this.tempList) {
-          List.remove({})
+          List.findByIdAndRemove(this.tempList._id)
           .then( () => done())
           .catch(done);
           return;
-        };
+        }
         done();
       });
 
       it('should return a list', done => {
         var updated = { name: 'updated name' };
 
-        request.put(`${url}/api/list/${this.tempList._id}`)
+        request.put(`${url}/${this.tempList._id}`)
         .send(updated)
         .end((err, res) => {
           if (err) return done(err);

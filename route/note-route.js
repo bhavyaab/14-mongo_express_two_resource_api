@@ -12,6 +12,8 @@ const noteRouter = module.exports = new Router();
 
 noteRouter.post('/api/list/:listID/note', jsonParser, function(req, res, next) {
   debug('POST: /api/list/:listID/note');
+  if(!req.params.listID) return next(createError(400, 'listID expected'));
+  if(!req.body) return next(createError(400, 'bad request'));
   List.findByIdAndAddNote(req.params.listID, req.body)
   .then( note => res.json(note))
   .catch(next);
@@ -19,6 +21,7 @@ noteRouter.post('/api/list/:listID/note', jsonParser, function(req, res, next) {
 
 noteRouter.get('/api/list/:listID/note', jsonParser, function(req, res, next){
   debug('GET: /api/list/:listID/note');
+  if(!req.params.listID) return next(createError(400, 'listID expected'));
 
   List.findById(req.params.listID)
   .populate('notes')
@@ -28,6 +31,8 @@ noteRouter.get('/api/list/:listID/note', jsonParser, function(req, res, next){
 
 noteRouter.get('/api/list/:listID/note/:id', jsonParser, function(req, res, next){
   debug('GET: /api/list/:listID/note/:id');
+  if(!req.params.listID) return next(createError(400, 'listID expected'));
+  if(!req.params.id) return next(createError(400, 'id expected'));
 
   List.findByIdAndGetNote (req.params.listID, req.params.id)
   .then(note => {
@@ -39,6 +44,9 @@ noteRouter.get('/api/list/:listID/note/:id', jsonParser, function(req, res, next
 
 noteRouter.put('/api/list/:listID/note/:id', jsonParser, function(req, res, next){
   debug('PUT: /api/list/:listID/note/:id');
+  if(!req.params.listID) return next(createError(400, 'listID expected'));
+  if(!req.params.id) return next(createError(400, 'id expected'));
+  if(!req.body) return next(createError(400, 'bad request'));
 
   List.findByIdAndGetNote (req.params.listID, req.params.id)
   .then(note => {
@@ -52,6 +60,8 @@ noteRouter.put('/api/list/:listID/note/:id', jsonParser, function(req, res, next
 noteRouter.delete('/api/list/:listID/note/:id', jsonParser, function(req, res, next){
   debug('DELETE: /api/list/:listID/note/:id');
   if(!req.params.listID) return next(createError(400, 'listID expected'));
+  if(!req.params.id) return next(createError(400, 'id expected'));
+
   List.findByIdAndGetNote(req.params.listID, req.params.id)
   .then(note => {
     Note.findByIdAndRemove(note._id, function (err, note){
